@@ -3,14 +3,19 @@
 import { motion, useReducedMotion } from "framer-motion";
 import {
   ArrowRight,
+  DropletIcon,
   GoogleLogo,
   PinIcon,
   ShieldIcon,
   SparkleIcon,
   StarIcon,
+  TintIcon,
   WrapIcon,
 } from "./ui/Icons";
+import type { SVGProps } from "react";
 import Image from "next/image";
+
+type IconType = (props: SVGProps<SVGSVGElement>) => JSX.Element;
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
@@ -27,7 +32,7 @@ const SERVICE_CHIPS = [
   },
   {
     label: "Vehicle Wrapping",
-    sub: "Avery Dennison · 3M · colour-change · custom signage",
+    sub: "HEXIS films · colour change · blackout kits · light tints",
     Icon: WrapIcon,
   },
 ];
@@ -305,30 +310,41 @@ function HeroVisual() {
         </motion.div>
       </div>
 
-      {/* Floating service callouts */}
+      {/* Floating service callouts — woven zigzag on mobile, framed on desktop */}
       <FloatingCallout
-        className="left-[2%] top-[14%]"
+        className="left-[0%] top-[1%] sm:top-[5%]"
         label="Detail"
-        sub="Mirror-finish polish"
+        sub="Mirror polish · interiors · engine bays · wheels · streak-free glass"
+        Icon={SparkleIcon}
         delay={0.6}
       />
       <FloatingCallout
-        className="right-[2%] top-[28%]"
+        className="right-[0%] top-[21%] sm:top-[16%]"
         label="Ceramic"
-        sub="Hydrophobic gloss"
+        sub="Hydrophobic · gloss enhancement · UV & environmental"
+        Icon={DropletIcon}
         delay={0.85}
       />
       <FloatingCallout
-        className="left-[6%] bottom-[14%]"
+        className="left-[0%] top-[41%] sm:top-[47%]"
         label="PPF"
-        sub="Self-healing TPU"
+        sub="Beats scratches, scuffs & scrapes · water-repellent · self-healing"
+        Icon={ShieldIcon}
         delay={1.1}
       />
       <FloatingCallout
-        className="right-[4%] bottom-[8%]"
+        className="right-[0%] top-[62%] sm:top-auto sm:bottom-[14%]"
         label="Wrap"
-        sub="Avery · 3M"
+        sub="HEXIS films · colour change · blackout kits"
+        Icon={WrapIcon}
         delay={1.35}
+      />
+      <FloatingCallout
+        className="left-[0%] top-[82%] sm:left-[7%] sm:top-auto sm:bottom-[3%]"
+        label="Tint"
+        sub="Any shade · carbon & ceramic films"
+        Icon={TintIcon}
+        delay={1.6}
       />
     </div>
   );
@@ -338,11 +354,13 @@ function FloatingCallout({
   className,
   label,
   sub,
+  Icon,
   delay = 0,
 }: {
   className?: string;
   label: string;
   sub: string;
+  Icon: IconType;
   delay?: number;
 }) {
   const reduce = useReducedMotion();
@@ -355,20 +373,26 @@ function FloatingCallout({
         delay: reduce ? 0 : delay,
         ease: easeOut,
       }}
-      className={`absolute ${className ?? ""}`}
+      className={`absolute w-[148px] sm:w-[188px] ${className ?? ""}`}
     >
       <motion.div
         animate={reduce ? undefined : { y: [0, -8, 0] }}
         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay }}
-        className="rounded-2xl border border-white/10 bg-ink-800/80 px-3 py-2 backdrop-blur-md shadow-elevated"
+        className="rounded-2xl border border-white/15 bg-ink-800/90 px-3.5 py-3 backdrop-blur-xl shadow-elevated ring-1 ring-inset ring-white/[0.06]"
       >
-        <div className="flex items-center gap-2">
-          <div className="h-1.5 w-1.5 rounded-full bg-accent-ice" />
-          <div className="font-display text-[13px] font-semibold text-white">
+        {/* Top accent line */}
+        <div className="mb-2.5 h-px w-8 bg-gradient-to-r from-accent-ice to-transparent" />
+        <div className="flex items-center gap-2.5">
+          <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-white/[0.06] text-chrome-50 ring-1 ring-white/10">
+            <Icon className="h-4 w-4" />
+          </span>
+          <div className="font-display text-[15.5px] font-bold leading-none tracking-tight text-white">
             {label}
           </div>
         </div>
-        <div className="mt-0.5 text-[10.5px] text-chrome-400">{sub}</div>
+        <div className="mt-2 text-[11px] leading-snug text-chrome-300">
+          {sub}
+        </div>
       </motion.div>
     </motion.div>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import type { SVGProps } from "react";
 import {
   ArrowRight,
   CheckIcon,
@@ -10,7 +11,26 @@ import {
 } from "./ui/Icons";
 import { Reveal } from "./ui/Reveal";
 
-const SERVICES = [
+type ServiceSection = {
+  heading: string;
+  description: string;
+  bullets: string[];
+};
+
+type Service = {
+  id: string;
+  eyebrow: string;
+  title: string;
+  tagline: string;
+  description?: string;
+  bullets?: string[];
+  sections?: ServiceSection[];
+  Icon: (props: SVGProps<SVGSVGElement>) => JSX.Element;
+  Visual: () => JSX.Element;
+  accent: string;
+};
+
+const SERVICES: Service[] = [
   {
     id: "detail",
     eyebrow: "01 · Detailing & Paint Correction",
@@ -32,14 +52,28 @@ const SERVICES = [
     id: "protection",
     eyebrow: "02 · Paint Protection · Ceramic & PPF",
     title: "Protection",
-    tagline: "Ceramic gloss. PPF armour. Showroom paint, locked in.",
-    description:
-      "Two layers of protection working together. Premium ceramic coatings give a deep hydrophobic gloss and chemical resistance; self-healing paint protection film (PPF) absorbs stone-chips, scratches and bug-etch on high-impact zones.",
-    bullets: [
-      "Premium ceramic coatings (gloss + UV)",
-      "Self-healing PPF on high-impact zones",
-      "Full-front, full-body &amp; track packages",
-      "Lifetime film warranty available",
+    tagline: "Two ways to lock in showroom paint.",
+    sections: [
+      {
+        heading: "Ceramic Paint Protection",
+        description:
+          "A premium liquid coating that chemically bonds to your paint — sealing it with serious hydrophobicity, a deep gloss enhancement and lasting UV &amp; environmental protection.",
+        bullets: [
+          "Extreme hydrophobicity — water sheets straight off",
+          "Deep gloss enhancement &amp; slickness",
+          "UV &amp; environmental protection",
+        ],
+      },
+      {
+        heading: "PPF Paint Protection Film",
+        description:
+          "Our toughest protection — a self-healing film that shrugs off scratches, scuffs and scrapes while staying water-repellent across the highest-impact panels.",
+        bullets: [
+          "Toughest defence vs scratches, scuffs &amp; scrapes",
+          "Water-repellent, self-healing top coat",
+          "Full-front, full-body &amp; track packages",
+        ],
+      },
     ],
     Icon: ShieldIcon,
     Visual: ProtectionVisual,
@@ -51,12 +85,12 @@ const SERVICES = [
     title: "Wrapping",
     tagline: "Transform the look. Protect the paint underneath.",
     description:
-      "Full vehicle colour-change wraps, satin and gloss finishes, custom commercial signage and accent wraps — installed in a dust-controlled bay using premium-only films from Avery Dennison and 3M.",
+      "Full vehicle colour changes in satin, gloss and specialty finishes, blackout kits, plus headlight &amp; tail light tinting — all installed in a dust-controlled bay using premium HEXIS films.",
     bullets: [
-      "Full colour-change &amp; accent wraps",
-      "Premium Avery &amp; 3M films only",
-      "Removable — paint stays factory-fresh",
-      "Custom commercial &amp; fleet livery",
+      "Full colour changes &amp; accent wraps",
+      "Premium HEXIS films",
+      "Blackout kits &amp; de-chrome",
+      "Headlight &amp; tail light tinting",
     ],
     Icon: WrapIcon,
     Visual: WrapVisual,
@@ -181,24 +215,62 @@ function ServiceCard({
           dangerouslySetInnerHTML={{ __html: service.tagline }}
         />
 
-        <p
-          className="mt-5 text-[14.5px] leading-relaxed text-chrome-300"
-          dangerouslySetInnerHTML={{ __html: service.description }}
-        />
-
-        <ul className="mt-6 space-y-2.5">
-          {service.bullets.map((b) => (
-            <li key={b} className="flex items-start gap-2.5">
-              <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-white/[0.06] ring-1 ring-white/10">
-                <CheckIcon className="h-3 w-3 text-accent-ice" />
-              </span>
-              <span
-                className="text-[14px] text-chrome-100"
-                dangerouslySetInnerHTML={{ __html: b }}
+        {service.sections ? (
+          <div className="mt-5 space-y-4">
+            {service.sections.map((sec) => (
+              <div
+                key={sec.heading}
+                className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-5"
+              >
+                <h4 className="flex items-center gap-2 font-display text-[15.5px] font-semibold tracking-tight text-white">
+                  <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent-ice" />
+                  {sec.heading}
+                </h4>
+                <p
+                  className="mt-2 text-[13.5px] leading-relaxed text-chrome-300"
+                  dangerouslySetInnerHTML={{ __html: sec.description }}
+                />
+                <ul className="mt-3 space-y-2">
+                  {sec.bullets.map((b) => (
+                    <li key={b} className="flex items-start gap-2.5">
+                      <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-white/[0.06] ring-1 ring-white/10">
+                        <CheckIcon className="h-3 w-3 text-accent-ice" />
+                      </span>
+                      <span
+                        className="text-[13.5px] text-chrome-100"
+                        dangerouslySetInnerHTML={{ __html: b }}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <>
+            {service.description && (
+              <p
+                className="mt-5 text-[14.5px] leading-relaxed text-chrome-300"
+                dangerouslySetInnerHTML={{ __html: service.description }}
               />
-            </li>
-          ))}
-        </ul>
+            )}
+            {service.bullets && (
+              <ul className="mt-6 space-y-2.5">
+                {service.bullets.map((b) => (
+                  <li key={b} className="flex items-start gap-2.5">
+                    <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-white/[0.06] ring-1 ring-white/10">
+                      <CheckIcon className="h-3 w-3 text-accent-ice" />
+                    </span>
+                    <span
+                      className="text-[14px] text-chrome-100"
+                      dangerouslySetInnerHTML={{ __html: b }}
+                    />
+                  </li>
+                ))}
+              </ul>
+            )}
+          </>
+        )}
 
         <a
           href="#quote"

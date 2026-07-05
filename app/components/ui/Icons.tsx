@@ -174,6 +174,25 @@ export function CarIcon(props: IconProps) {
   );
 }
 
+export function DropletIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M12 3s6 5.5 6 10a6 6 0 01-12 0c0-4.5 6-10 6-10z" />
+      <path d="M9.5 14a2.5 2.5 0 002.5 2.5" opacity="0.6" />
+    </svg>
+  );
+}
+
+export function TintIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="3.5" y="5" width="17" height="14" rx="2.5" />
+      <path d="M3.5 12q8.5-3 17 0" />
+      <path d="M16 5.5l4.5 4.5" opacity="0.5" />
+    </svg>
+  );
+}
+
 export function LogoMark(props: IconProps) {
   return (
     <svg viewBox="0 0 40 40" {...props}>

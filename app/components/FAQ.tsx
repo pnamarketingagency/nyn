@@ -12,7 +12,7 @@ const FAQS = [
   },
   {
     q: "Do you use premium films?",
-    a: "Yes — premium only. We work with Avery Dennison and 3M for wraps, leading self-healing TPU films for PPF, and carbon / ceramic films for tinting. We don't use cheap films, and we won't quote ones we wouldn't put on our own cars.",
+    a: "Yes — premium only. We work with HEXIS films for wraps, leading self-healing TPU films for PPF, and carbon / ceramic films for tinting. We don't use cheap films, and we won't quote ones we wouldn't put on our own cars.",
   },
   {
     q: "Is your window tint QLD-legal?",
